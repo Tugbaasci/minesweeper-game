@@ -6,6 +6,8 @@ const CHEAT_REVEAL_ALL = false;
 const ROWS_COUNT = 10;
 const COLS_COUNT = 10;
 const BOMBS_COUNT = 10;
+let clearedCells = 0;
+//const totalReveald = 0;
 
 var defeat = false;
 var victory = false;
@@ -54,6 +56,9 @@ render();
 // Game functions definitions
 
   function discoverCell(row, col) {
+    if (cells[row][col].isBomb == true) {
+      defeat = true;
+    }
     // TODO: Task 5 - Reveal cells when clicked.
     if (cells[row][col].discovered === true ) return;
   cells[row][col].discovered = true;
@@ -72,6 +77,8 @@ render();
   //
   // TODO: Task 8 - Implement defeat. If the player "discovers" a bomb (clicks on it without holding shift), set the variable defeat to true.
   //
+
+
   }
 ;
 
@@ -94,17 +101,14 @@ function countAdjacentBombs(row, col) {
     
     for (let j = col-1; j < col + 2; j++) {
       //check if row and col is in the grid
-      if (cells[i] && cells[i][j]) {
-        if (cells[i][j].isBomb) {
-          count++;
+      if (cells[i] && cells[i][j] && cells[i][j].isBomb) {
+        count += 1;
       }
     }
     }
+    return count;
   }
   //  so that it returns the count of adjacent cells with bombs in them.
-  console.log(count);
-  return count;
-}
 
 
 function getBombsCount() {
@@ -112,23 +116,32 @@ function getBombsCount() {
   //
   // TODO: Task 9 - Implement stats: the counters currently always display 0, calculate and return the relevant values.
   //
-  console.log(countAdjacentBombs(row,col));
-  return countAdjacentBombs(row,col)
-  ;
+  return BOMBS_COUNT;
 }
 
 function getClearedCells() {
   //
   // TODO: Task 9 - Implement stats: the counters currently always display 0, calculate and return the relevant values.
   //
-  return 0;
+ 
+  for (let i = 0; i < ROWS_COUNT; i++) {
+    for (let j = 0; j < COLS_COUNT; j++) {
+      if (cells[i][j].discovered && !cells[i][j].isBomb) {
+        clearedCells++;
+      }
+      
+    }
+    
+  }
+  return clearedCells;
 }
 
 function getTotalCellsToClear() {
   //
   // TODO: Task 9 - Implement stats: the counters currently always display 0, calculate and return the relevant values.
   //
-  return 0;
+
+  return ROWS_COUNT * COLS_COUNT;
 }
 
 function checkForVictory() {
@@ -136,7 +149,11 @@ function checkForVictory() {
   // TODO: Task 10 - Implement victory. If the player has revealed as many cells as they must (every cell that isn't a
   //                 bomb), set variable victory to true.
   //
-  return 0;
+  if (clearedCells == ROWS_COUNT * COLS_COUNT - BOMBS_COUNT){
+    victory == true;
+
+  }
+  return ;
 }
 
 //
@@ -217,6 +234,7 @@ function render() {
 function onCellClicked(row, col, event) {
   if (event.shiftKey) {
     flagCell(row, col);
+    
   } else {
     discoverCell(row, col);
   }
