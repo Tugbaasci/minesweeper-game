@@ -126,7 +126,7 @@ function getClearedCells() {
  
   for (let i = 0; i < ROWS_COUNT; i++) {
     for (let j = 0; j < COLS_COUNT; j++) {
-      if (cells[i][j].discovered && !cells[i][j].isBomb) {
+      if (cells[i][j].discovered && cells[i][j].isBomb == false) {
         clearedCells++;
       }
       
@@ -153,7 +153,7 @@ function checkForVictory() {
     victory == true;
 
   }
-  return ;
+  return victory;
 }
 
 //
@@ -164,8 +164,7 @@ function getMessage() {
     return "Well done! 👏🏼<br><br>Refresh the page to start again.";
   } else if (defeat) {
     return "Boom! 💥<br><br>Refresh the page to try again.";
-  }
-  return "";
+  };
 }
 
 // "Render" the game. Update the content of the page to reflect any changes to the game state.
